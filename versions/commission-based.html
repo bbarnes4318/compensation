@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agent Compensation Portal - Commission Based</title>
+    <title>Final Expense Agent Portal</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --primary-color: #1E3A8A;
             --secondary-color: #DC2626;
@@ -13,38 +19,33 @@
             --warning-color: #D97706;
             --dark: #1F2937;
             --light: #F8FAFC;
-            --border-color: #E5E7EB;
-            --text-light: #6B7280;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1E3A8A 0%, #1F2937 100%);
+            height: 100vh;
             color: var(--dark);
-            min-height: 100vh;
-            line-height: 1.6;
+            overflow: hidden;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 10px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .header {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 10px 20px;
+            background: white;
             border-radius: 10px;
-            box-shadow: var(--shadow-lg);
-            margin-bottom: 15px;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            box-shadow: var(--card-shadow);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -58,14 +59,14 @@
         }
 
         .logo-image {
-            height: 50px;
+            height: 80px;
             width: auto;
             object-fit: contain;
         }
 
         .logo-text {
             color: var(--primary-color);
-            font-size: 1.2em;
+            font-size: 1.5em;
             font-weight: 700;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
@@ -73,147 +74,170 @@
         .header-controls {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
+        }
+
+        .view-switcher {
+            display: flex;
+            gap: 8px;
+        }
+
+        .view-btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 20px;
+            background: var(--light);
+            color: var(--dark);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+
+        .view-btn.active {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
         }
 
         .independent-link {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
+            color: #7f8c8d;
+            font-size: 0.85em;
             cursor: pointer;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            border: 2px solid var(--primary-color);
+            text-decoration: underline;
+            transition: color 0.3s ease;
         }
 
         .independent-link:hover {
-            background: var(--primary-color);
-            color: white;
+            color: var(--primary-color);
         }
 
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
             gap: 10px;
-            min-height: calc(100vh - 100px);
-        }
-
-        .left-panel, .right-panel {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 8px;
-            padding: 8px;
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .results-section {
             flex: 1;
+            overflow: hidden;
+        }
+
+        .left-panel {
+            flex: 0 0 65%;
             display: flex;
             flex-direction: column;
+            gap: 10px;
         }
 
-        .section-title {
-            background: linear-gradient(135deg, #1E3A8A 0%, #DC2626 100%);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.8em;
-            font-weight: 700;
-            margin-bottom: 6px;
-            text-align: center;
+        .right-panel {
+            flex: 0 0 35%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
         }
 
-        .results-grid {
+        .dashboard {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
-            margin-bottom: 8px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            flex-shrink: 0;
         }
 
-        .result-card {
-            background: linear-gradient(135deg, #1E3A8A 0%, #1F2937 100%);
-            color: white;
-            padding: 6px;
-            border-radius: 6px;
-            text-align: center;
-            box-shadow: var(--shadow);
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease;
         }
 
-        .result-label {
-            display: block;
-            font-size: 0.7em;
-            opacity: 0.9;
-            margin-bottom: 2px;
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
         }
 
-        .result-value {
-            display: block;
-            font-size: 1em;
-            font-weight: 700;
-        }
-
-        .annual-breakdown {
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(135deg, #1E3A8A 0%, #1F2937 100%);
-            color: white;
-            padding: 6px;
-            border-radius: 6px;
-            box-shadow: var(--shadow);
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+        }
+
+        .card-title {
+            font-size: 0.8em;
+            color: #7f8c8d;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-icon {
+            font-size: 1.2em;
         }
 
         .metric-value {
-            font-size: 1.1em;
+            font-size: 1.8em;
             font-weight: 700;
+            color: var(--primary-color);
         }
 
-        .backend-income {
-            font-size: 0.7em;
-            opacity: 0.8;
+        .metric-sublabel {
+            font-size: 0.75em;
+            color: #95a5a6;
+            margin-top: 2px;
         }
 
         .playground {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: var(--card-shadow);
             flex: 1;
             display: flex;
             flex-direction: column;
         }
 
         .variables-container {
+            display: flex;
+            gap: 15px;
             flex: 1;
         }
 
         .variables-section {
-            margin-bottom: 8px;
+            flex: 1;
+        }
+
+        .section-title {
+            font-size: 0.95em;
+            color: var(--dark);
+            margin-bottom: 12px;
+            padding: 6px 10px;
+            background: linear-gradient(135deg, #1E3A8A 0%, #DC2626 100%);
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
         }
 
         .variable-control {
-            margin-bottom: 6px;
-            padding: 6px;
-            background: #F8FAFC;
+            margin-bottom: 12px;
+            padding: 8px;
+            background: #f8f9fa;
             border-radius: 6px;
-            border: 1px solid var(--border-color);
         }
 
         .variable-label {
             display: block;
-            font-weight: 600;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
             color: var(--dark);
+            font-weight: 600;
             font-size: 0.8em;
         }
 
         .variable-input {
             width: 100%;
-            padding: 4px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 0.8em;
-            margin-bottom: 3px;
-            transition: border-color 0.3s ease;
+            padding: 5px 8px;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 0.9em;
         }
 
         .variable-input:focus {
@@ -223,72 +247,110 @@
 
         .range-input {
             width: 100%;
-            margin-bottom: 8px;
+            margin: 5px 0;
+            height: 4px;
         }
 
         .info-text {
-            font-size: 0.7em;
-            color: var(--text-light);
+            font-size: 0.75em;
+            color: #7f8c8d;
+            margin-top: 4px;
             font-style: italic;
         }
 
-        .advanced-section {
-            margin-top: 8px;
-            border-top: 2px solid var(--border-color);
-            padding-top: 8px;
+        .results-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: var(--card-shadow);
         }
 
-        .advanced-toggle {
+        .result-card {
+            padding: 10px;
+            background: linear-gradient(135deg, #1E3A8A 0%, #1F2937 100%);
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: pointer;
-            padding: 6px 8px;
-            background: linear-gradient(135deg, #1E3A8A 0%, #DC2626 100%);
-            color: white;
-            border-radius: 6px;
-            margin-bottom: 6px;
-            transition: all 0.3s ease;
+        }
+
+        .result-label {
             font-size: 0.8em;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .advanced-toggle:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+        .result-value {
+            font-size: 1.3em;
+            font-weight: 700;
         }
 
-        .advanced-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .advanced-content.expanded {
-            max-height: 180px;
-        }
-
-        .advanced-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
-        }
-
-        .commission-section {
+        /* Commission Schedule Styles */
+        .commission-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 6px;
+            box-shadow: var(--card-shadow);
             margin-top: 8px;
+        }
+
+        .commission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2px;
+            cursor: pointer;
+            flex-wrap: wrap;
+        }
+
+        .commission-title {
+            font-size: 0.8em;
+            color: var(--primary-color);
+            font-weight: 600;
         }
 
         .commission-toggle {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            padding: 12px 15px;
-            background: linear-gradient(135deg, #1E3A8A 0%, #DC2626 100%);
-            color: white;
-            border-radius: 8px;
-            margin-bottom: 15px;
             font-size: 0.65em;
+            color: #7f8c8d;
             white-space: nowrap;
+        }
+
+        .commission-table {
+            display: table;
+            width: 100%;
+            font-size: 0.55em;
+            border-collapse: collapse;
+        }
+
+        .commission-row {
+            display: table-row;
+            transition: background-color 0.3s ease;
+        }
+
+        .commission-row:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .commission-row.current {
+            background: linear-gradient(135deg, #1E3A8A15, #DC262615);
+            border-left: 3px solid var(--primary-color);
+            font-weight: 600;
+        }
+
+        .commission-cell {
+            display: table-cell;
+            padding: 1px 2px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .commission-cell:first-child {
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
         }
 
         .commission-content {
@@ -298,89 +360,59 @@
         }
 
         .commission-content.expanded {
-            max-height: 100px;
+            max-height: 140px;
         }
 
-        .commission-panel {
-            background: #F8FAFC;
-            padding: 4px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            margin-top: 4px;
+        .current-rate-badge {
+            display: inline-block;
+            background: var(--success-color);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.65em;
+            margin-left: 5px;
         }
 
-        .commission-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2px;
-            flex-wrap: wrap;
+        .advanced-section {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
         }
 
-        .commission-title {
-            font-size: 0.7em;
-            font-weight: 600;
-            color: var(--dark);
+        .advanced-section.expanded {
+            max-height: 400px;
         }
 
-        .commission-table {
-            font-size: 0.5em;
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .commission-row {
-            border-bottom: 1px solid #E5E7EB;
-        }
-
-        .commission-row:last-child {
-            border-bottom: none;
-        }
-
-        .commission-row.current {
-            background: linear-gradient(135deg, #1E3A8A15, #DC262615);
-            font-weight: 600;
-        }
-
-        .commission-cell {
-            padding: 1px;
-            text-align: center;
-            border-right: 1px solid #E5E7EB;
-        }
-
-        .commission-cell:last-child {
-            border-right: none;
-        }
-
-        .commission-cell:first-child {
-            text-align: left;
-            font-weight: 600;
-        }
-
+        /* Professional Definitions Panel Styles */
         .definitions-panel {
-            background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
-            border: 2px solid var(--primary-color);
-            border-radius: 12px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
             padding: 8px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
         }
 
         .definitions-header {
+            margin-bottom: 8px;
             text-align: center;
-            margin-bottom: 6px;
         }
 
-        .definitions-title {
+        .definitions-header h4 {
             color: var(--primary-color);
-            font-size: 0.9em;
+            font-size: 0.75em;
             font-weight: 700;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         .definitions-subtitle {
-            color: var(--text-light);
-            font-size: 0.7em;
+            color: #6c757d;
+            font-size: 0.65em;
+            line-height: 1.2;
+            margin: 0;
             font-style: italic;
         }
 
@@ -392,58 +424,93 @@
 
         .terms-section, .variables-section-def {
             background: white;
+            border-radius: 6px;
             padding: 6px;
-            border-radius: 8px;
-            border: 1px solid #CBD5E1;
+            border: 1px solid #e9ecef;
         }
 
         .terms-section h5, .variables-section-def h5 {
-            color: var(--primary-color);
-            font-size: 0.75em;
+            color: var(--dark);
+            font-size: 0.7em;
             font-weight: 600;
             margin-bottom: 4px;
-            border-bottom: 1px solid #CBD5E1;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+            border-bottom: 1px solid var(--primary-color);
             padding-bottom: 2px;
         }
 
         .term-item {
             margin-bottom: 4px;
-            padding: 2px;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
         }
 
         .term-label {
-            font-weight: 600;
-            color: var(--dark);
-            font-size: 0.65em;
-        }
-
-        .term-definition {
-            color: var(--text-light);
-            font-size: 0.6em;
-            line-height: 1.3;
-        }
-
-        .variable-def-grid {
-            display: grid;
-            gap: 3px;
-        }
-
-        .variable-def-item {
-            padding: 2px;
-        }
-
-        .var-name {
             font-weight: 600;
             color: var(--primary-color);
             font-size: 0.65em;
         }
 
-        .var-desc {
-            color: var(--text-light);
+        .term-definition {
+            color: #495057;
             font-size: 0.6em;
-            line-height: 1.3;
+            line-height: 1.2;
+            margin-left: 4px;
         }
 
+        .variable-def-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .variable-def-item {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            padding: 4px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border-left: 2px solid var(--primary-color);
+        }
+
+        .var-name {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.65em;
+        }
+
+        .var-desc {
+            color: #6c757d;
+            font-size: 0.6em;
+            line-height: 1.2;
+        }
+
+        .definitions-panel.hidden {
+            display: none;
+        }
+
+
+        .hidden {
+            display: none !important;
+        }
+
+        .annual-breakdown {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+        }
+
+        .backend-income {
+            font-size: 0.65em;
+            color: #95a5a6;
+            font-weight: normal;
+        }
+
+        /* Modal Styles - Compact Version */
         .modal {
             display: none;
             position: fixed;
@@ -453,18 +520,24 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .modal-content {
-            background-color: white;
-            margin: 2% auto;
-            padding: 20px;
+            background: white;
             border-radius: 12px;
-            width: 95%;
-            max-width: 700px;
-            max-height: 95vh;
-            overflow-y: auto;
-            box-shadow: var(--shadow-lg);
+            padding: 20px;
+            max-width: 1100px;
+            width: 90%;
+            max-height: 85vh;
+            animation: slideIn 0.3s ease;
+            position: relative;
         }
 
         .modal-header {
@@ -473,98 +546,143 @@
             align-items: center;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 2px solid var(--border-color);
+            border-bottom: 2px solid var(--light);
         }
 
         .modal-title {
-            color: var(--primary-color);
             font-size: 1.3em;
+            color: var(--primary-color);
             font-weight: 700;
         }
 
-        .close {
-            color: var(--text-light);
-            font-size: 28px;
-            font-weight: bold;
+        .close-btn {
+            font-size: 1.3em;
             cursor: pointer;
+            color: #7f8c8d;
             transition: color 0.3s ease;
+            line-height: 1;
+            padding: 0 5px;
         }
 
-        .close:hover {
+        .close-btn:hover {
             color: var(--danger-color);
         }
 
-        .modal-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        .independent-info {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
             margin-bottom: 15px;
+            border-left: 3px solid #11998e;
         }
 
-        .modal-section {
-            background: #F8FAFC;
-            padding: 15px;
+        .independent-info p {
+            color: var(--dark);
+            font-size: 0.85em;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .independent-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.2fr;
+            gap: 15px;
+        }
+
+        .calc-section {
+            background: #f8f9fa;
+            padding: 12px;
             border-radius: 8px;
-            border: 1px solid var(--border-color);
         }
 
-        .modal-section h4 {
-            color: var(--primary-color);
+        .calc-title {
+            font-size: 0.95em;
+            color: var(--dark);
             margin-bottom: 10px;
-            font-size: 1em;
+            font-weight: 600;
         }
 
-        .modal-results {
-            background: linear-gradient(135deg, #1E3A8A 0%, #1F2937 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-
-        .modal-results h4 {
-            color: white;
-            margin-bottom: 10px;
-            font-size: 1em;
-        }
-
-        .result-row {
-            display: flex;
-            justify-content: space-between;
+        .modal .variable-control {
             margin-bottom: 8px;
-            padding: 5px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 0.9em;
+            padding: 6px;
         }
 
-        .result-row:last-child {
-            border-bottom: none;
-            font-weight: 700;
-            font-size: 1em;
+        .modal .variable-label {
+            font-size: 0.75em;
+        }
+
+        .modal .variable-input {
+            padding: 4px 6px;
+            font-size: 0.85em;
         }
 
         .fixed-params {
-            background: #E2E8F0;
-            padding: 10px;
+            padding: 8px;
+            background: white;
             border-radius: 6px;
-            margin-top: 10px;
             font-size: 0.8em;
         }
 
-        @media (max-width: 1200px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
+        .fixed-params p {
+            margin: 3px 0;
+        }
+
+        .independent-results {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .independent-result-card {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .independent-result-label {
+            font-size: 0.7em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .independent-result-value {
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        .comparison-box {
+            margin-top: 12px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.85em;
+        }
+
+        .lapse-note {
+            font-size: 0.7em;
+            color: #7f8c8d;
+            font-style: italic;
+            margin-top: 3px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         @media (max-height: 700px) {
-            .definitions-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .commission-content.expanded {
-                max-height: 100px;
-            }
+            .card { padding: 8px; }
+            .metric-value { font-size: 1.5em; }
+            .section-title { font-size: 0.85em; padding: 4px 8px; }
+            .variable-control { margin-bottom: 8px; padding: 6px; }
         }
     </style>
 </head>
@@ -584,46 +702,48 @@
         <!-- Agent View -->
         <div id="agentView" class="main-content">
             <div class="left-panel">
-                <div class="results-section">
-                    <h3 class="section-title">💰 Monthly Results</h3>
-                    <div class="results-grid">
-                        <div class="result-card">
-                            <span class="result-label">Total Calls</span>
-                            <span class="result-value" id="totalCalls">0</span>
+                <!-- Dashboard Cards -->
+                <div class="dashboard">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Base Pay</span>
+                            <span class="card-icon">💰</span>
                         </div>
-                        <div class="result-card">
-                            <span class="result-label">Applications</span>
-                            <span class="result-value" id="applications">0</span>
-                        </div>
-                        <div class="result-card">
-                            <span class="result-label">Issued Policies</span>
-                            <span class="result-value" id="issuedPolicies">0</span>
-                        </div>
-                        <div class="result-card">
-                            <span class="result-label">Level Policies</span>
-                            <span class="result-value" id="levelPolicies">0</span>
-                        </div>
+                        <div class="metric-value" id="monthlyBasePay">$0</div>
+                        <div class="metric-sublabel">Monthly</div>
                     </div>
-                    
-                    <div class="annual-breakdown">
-                        <div>
-                            <span class="result-label">Monthly Commission</span>
-                            <div class="metric-value" id="monthlyCommission">$0</div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Commission</span>
+                            <span class="card-icon">💵</span>
                         </div>
-                        <div>
-                            <span class="result-label">Total Monthly</span>
-                            <div class="metric-value" id="totalMonthlyPay">$0</div>
-                        </div>
+                        <div class="metric-value" id="monthlyCommission">$0</div>
+                        <div class="metric-sublabel">Monthly</div>
                     </div>
-                    
-                    <div class="annual-breakdown">
-                        <div class="metric-value" id="totalAnnualPay">$0</div>
-                        <div class="backend-income" id="backendNote">+$0 (Mo 10-12)</div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Total Monthly</span>
+                            <span class="card-icon">💸</span>
+                        </div>
+                        <div class="metric-value" id="totalMonthlyPay">$0</div>
+                        <div class="metric-sublabel">Base + Comm</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Annual</span>
+                            <span class="card-icon">📈</span>
+                        </div>
+                        <div class="annual-breakdown">
+                            <div class="metric-value" id="totalAnnualPay">$0</div>
+                            <div class="backend-income" id="backendNote">+$0 (Mo 10-12)</div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="right-panel">
+                <!-- Playground -->
                 <div class="playground">
                     <div class="variables-container">
                         <!-- Standard Variables -->
@@ -640,15 +760,17 @@
                                 <label class="variable-label">Conversion %</label>
                                 <input type="number" class="variable-input" id="conversionPercentage" value="20" min="0" max="100" step="5" onchange="calculateAll()">
                                 <input type="range" class="range-input" min="0" max="100" step="5" value="20" oninput="document.getElementById('conversionPercentage').value = this.value; calculateAll()">
-                                <div class="info-text">Billable calls to applications</div>
                             </div>
                         </div>
 
                         <!-- Advanced Variables -->
-                        <div class="advanced-section">
-                            <div class="definitions-panel">
+                        <div class="variables-section">
+                            <h3 class="section-title" onclick="toggleAdvanced()">🔧 Advanced Variables ▼ <span style="font-size: 0.7em; color: #7f8c8d; font-weight: normal;">(Click to view & edit)</span></h3>
+                            
+                            <!-- Definitions Panel (visible by default) -->
+                            <div id="advancedDefinitions" class="definitions-panel">
                                 <div class="definitions-header">
-                                    <h4 class="definitions-title">Commission Calculation Variables</h4>
+                                    <h4>Commission Calculation Variables</h4>
                                     <p class="definitions-subtitle">Advanced variables determine how commissions are calculated. Review the definitions below. To view or edit the current values, use the controls above.</p>
                                 </div>
                                 
@@ -677,132 +799,138 @@
                                         <h5>Advanced Variables</h5>
                                         <div class="variable-def-grid">
                                             <div class="variable-def-item">
-                                                <div class="var-name">Avg Premium</div>
-                                                <div class="var-desc">The average policy annual premium</div>
+                                                <span class="var-name">Avg Premium</span>
+                                                <span class="var-desc">The average policy annual premium</span>
                                             </div>
                                             <div class="variable-def-item">
-                                                <div class="var-name">Level Coverage %</div>
-                                                <div class="var-desc">The % of issued policies that qualify for level coverage</div>
+                                                <span class="var-name">Level Coverage</span>
+                                                <span class="var-desc">The % of issued policies that qualify for level coverage</span>
                                             </div>
                                             <div class="variable-def-item">
-                                                <div class="var-name">Graded %</div>
-                                                <div class="var-desc">The % of issued policies that qualify for graded coverage</div>
+                                                <span class="var-name">Graded %</span>
+                                                <span class="var-desc">The % of issued policies that qualify for graded coverage</span>
                                             </div>
                                             <div class="variable-def-item">
-                                                <div class="var-name">Placement %</div>
-                                                <div class="var-desc">The % of applications that are paid and issued</div>
+                                                <span class="var-name">Placement %</span>
+                                                <span class="var-desc">The % of applications that are paid and issued</span>
                                             </div>
                                             <div class="variable-def-item">
-                                                <div class="var-name">Lapsed %</div>
-                                                <div class="var-desc">The % of policies that cancel</div>
+                                                <span class="var-name">Lapsed %</span>
+                                                <span class="var-desc">The % of policies that cancel</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div class="advanced-section" id="advancedVariables">
+                                <div class="variable-control">
+                                    <label class="variable-label">Avg Premium ($)</label>
+                                    <input type="number" class="variable-input" id="averagePremium" value="750" min="100" max="2000" onchange="calculateAll()">
+                                </div>
 
-                            <h3 class="advanced-toggle" onclick="toggleAdvanced()">⚙️ Advanced Variables (Click to view & edit)</h3>
-                            <div class="advanced-content" id="advancedContent">
-                                <div class="advanced-grid">
-                                    <div class="variable-control">
-                                        <label class="variable-label">Avg Premium</label>
-                                        <input type="number" class="variable-input" id="avgPremium" value="750" min="500" max="1500" step="25" onchange="calculateAll()">
-                                        <input type="range" class="range-input" min="500" max="1500" step="25" value="750" oninput="document.getElementById('avgPremium').value = this.value; calculateAll()">
-                                        <div class="info-text">Annual premium amount</div>
-                                    </div>
+                                <div class="variable-control">
+                                    <label class="variable-label">Level Coverage %</label>
+                                    <input type="number" class="variable-input" id="day1CoveragePercentage" value="75" min="0" max="100" onchange="calculateAll()">
+                                </div>
 
-                                    <div class="variable-control">
-                                        <label class="variable-label">Level Coverage %</label>
-                                        <input type="number" class="variable-input" id="levelCoverage" value="75" min="0" max="100" step="5" onchange="calculateAll()">
-                                        <input type="range" class="range-input" min="0" max="100" step="5" value="75" oninput="document.getElementById('levelCoverage').value = this.value; calculateAll()">
-                                        <div class="info-text">% of policies that qualify</div>
-                                    </div>
+                                <div class="variable-control">
+                                    <label class="variable-label">Graded %</label>
+                                    <input type="number" class="variable-input" id="gradedPercentage" value="25" min="0" max="100" onchange="calculateAll()">
+                                </div>
 
-                                    <div class="variable-control">
-                                        <label class="variable-label">Graded %</label>
-                                        <input type="number" class="variable-input" id="gradedPercentage" value="25" min="0" max="100" step="5" onchange="calculateAll()">
-                                        <input type="range" class="range-input" min="0" max="100" step="5" value="25" oninput="document.getElementById('gradedPercentage').value = this.value; calculateAll()">
-                                        <div class="info-text">% of policies that qualify</div>
-                                    </div>
+                                <div class="variable-control">
+                                    <label class="variable-label">Placement %</label>
+                                    <input type="number" class="variable-input" id="placementPercentage" value="75" min="0" max="100" onchange="calculateAll()">
+                                </div>
 
-                                    <div class="variable-control">
-                                        <label class="variable-label">Placement %</label>
-                                        <input type="number" class="variable-input" id="placementPercentage" value="75" min="0" max="100" step="5" onchange="calculateAll()">
-                                        <input type="range" class="range-input" min="0" max="100" step="5" value="75" oninput="document.getElementById('placementPercentage').value = this.value; calculateAll()">
-                                        <div class="info-text">Applications to issued</div>
-                                    </div>
-
-                                    <div class="variable-control">
-                                        <label class="variable-label">Lapsed %</label>
-                                        <input type="number" class="variable-input" id="lapsedPercentage" value="35" min="0" max="100" step="5" onchange="calculateAll()">
-                                        <input type="range" class="range-input" min="0" max="100" step="5" value="35" oninput="document.getElementById('lapsedPercentage').value = this.value; calculateAll()">
-                                        <div class="info-text">Policies that cancel</div>
-                                    </div>
+                                <div class="variable-control">
+                                    <label class="variable-label">Lapsed %</label>
+                                    <input type="number" class="variable-input" id="lapsedPercentage" value="25" min="0" max="100" onchange="calculateAll()">
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
 
-                        <!-- Commission Schedule -->
-                        <div class="commission-section">
-                            <div class="commission-toggle" onclick="toggleCommissionSchedule()">
-                                <span>💎 Commission Schedule</span>
-                                <span id="commissionToggleText">Show</span>
+            <div class="right-panel">
+                <div class="results-panel">
+                    <h3 style="font-size: 1em; margin-bottom: 12px; color: var(--primary-color);">Performance Metrics</h3>
+                    <div class="result-card">
+                        <span class="result-label">Policies/Month</span>
+                        <span class="result-value" id="policiesPerMonth">0</span>
+                    </div>
+                    <div class="result-card">
+                        <span class="result-label">Level Policies</span>
+                        <span class="result-value" id="day1Policies">0</span>
+                    </div>
+                    <div class="result-card">
+                        <span class="result-label">Graded Policies</span>
+                        <span class="result-value" id="gradedPolicies">0</span>
+                    </div>
+                    <div class="result-card">
+                        <span class="result-label">Backend Comm (10-12)</span>
+                        <span class="result-value" id="backendCommissions">$0</span>
+                    </div>
+                    <div class="result-card" style="background: linear-gradient(135deg, #11998e, #38ef7d);">
+                        <span class="result-label">Total Projected</span>
+                        <span class="result-value" id="totalProjected">$0</span>
+                    </div>
+                </div>
+
+                <!-- Commission Schedule Panel -->
+                <div class="commission-panel">
+                    <div class="commission-header" onclick="toggleCommissionSchedule()">
+                        <span class="commission-title">💎 Commission Schedule</span>
+                        <span class="commission-toggle" id="commissionToggle">▼ View</span>
+                    </div>
+                    <div class="commission-content" id="commissionContent">
+                        <div class="commission-table">
+                            <div class="commission-row">
+                                <div class="commission-cell">Conversion</div>
+                                <div class="commission-cell">Level</div>
+                                <div class="commission-cell">Graded</div>
                             </div>
-                            <div class="commission-content" id="commissionContent">
-                                <div class="commission-panel">
-                                    <div class="commission-header">
-                                        <div class="commission-title">Performance-Based Commission Rates</div>
-                                    </div>
-                                    <table class="commission-table">
-                                        <tbody>
-                                            <tr class="commission-row">
-                                                <td class="commission-cell">Conversion</td>
-                                                <td class="commission-cell">Level</td>
-                                                <td class="commission-cell">Graded</td>
-                                            </tr>
-                                            <tr class="commission-row">
-                                                <td class="commission-cell">&lt;10%</td>
-                                                <td class="commission-cell">10%</td>
-                                                <td class="commission-cell">10%</td>
-                                            </tr>
-                                            <tr class="commission-row">
-                                                <td class="commission-cell">10%</td>
-                                                <td class="commission-cell">15%</td>
-                                                <td class="commission-cell">10%</td>
-                                            </tr>
-                                            <tr class="commission-row">
-                                                <td class="commission-cell">15%</td>
-                                                <td class="commission-cell">20%</td>
-                                                <td class="commission-cell">15%</td>
-                                            </tr>
-                                            <tr class="commission-row">
-                                                <td class="commission-cell">20%</td>
-                                                <td class="commission-cell">22%</td>
-                                                <td class="commission-cell">18%</td>
-                                            </tr>
-                                            <tr class="commission-row">
-                                                <td class="commission-cell">25%</td>
-                                                <td class="commission-cell">25%</td>
-                                                <td class="commission-cell">19%</td>
-                                            </tr>
-                                            <tr class="commission-row">
-                                                <td class="commission-cell">30%</td>
-                                                <td class="commission-cell">26%</td>
-                                                <td class="commission-cell">20%</td>
-                                            </tr>
-                                            <tr class="commission-row">
-                                                <td class="commission-cell">35%</td>
-                                                <td class="commission-cell">28%</td>
-                                                <td class="commission-cell">20%</td>
-                                            </tr>
-                                            <tr class="commission-row">
-                                                <td class="commission-cell">40%+</td>
-                                                <td class="commission-cell">30%</td>
-                                                <td class="commission-cell">20%</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div class="commission-row" id="rate-below10">
+                                <div class="commission-cell">&lt;10%</div>
+                                <div class="commission-cell">10%</div>
+                                <div class="commission-cell">10%</div>
+                            </div>
+                            <div class="commission-row" id="rate-10">
+                                <div class="commission-cell">10%</div>
+                                <div class="commission-cell">15%</div>
+                                <div class="commission-cell">10%</div>
+                            </div>
+                            <div class="commission-row" id="rate-15">
+                                <div class="commission-cell">15%</div>
+                                <div class="commission-cell">20%</div>
+                                <div class="commission-cell">15%</div>
+                            </div>
+                            <div class="commission-row" id="rate-20">
+                                <div class="commission-cell">20%</div>
+                                <div class="commission-cell">22%</div>
+                                <div class="commission-cell">18%</div>
+                            </div>
+                            <div class="commission-row" id="rate-25">
+                                <div class="commission-cell">25%</div>
+                                <div class="commission-cell">25%</div>
+                                <div class="commission-cell">19%</div>
+                            </div>
+                            <div class="commission-row" id="rate-30">
+                                <div class="commission-cell">30%</div>
+                                <div class="commission-cell">26%</div>
+                                <div class="commission-cell">20%</div>
+                            </div>
+                            <div class="commission-row" id="rate-35">
+                                <div class="commission-cell">35%</div>
+                                <div class="commission-cell">28%</div>
+                                <div class="commission-cell">20%</div>
+                            </div>
+                            <div class="commission-row" id="rate-40">
+                                <div class="commission-cell">40%+</div>
+                                <div class="commission-cell">30%</div>
+                                <div class="commission-cell">20%</div>
                             </div>
                         </div>
                     </div>
@@ -810,79 +938,78 @@
             </div>
         </div>
 
-        <!-- Independent Agent Modal -->
-        <div id="independentModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title">🚀 Independent Agent Calculator</h2>
-                    <span class="close" onclick="closeIndependentModal()">&times;</span>
-                </div>
-                
-                <div class="modal-grid">
-                    <div class="modal-section">
-                        <h4>📊 Input Variables</h4>
-                        <div class="variable-control">
-                            <label class="variable-label">Calls per Day</label>
-                            <input type="number" class="variable-input" id="indCallsPerDay" value="20" min="5" max="50" onchange="calculateIndependent()">
-                        </div>
-                        <div class="variable-control">
-                            <label class="variable-label">Conversion %</label>
-                            <input type="number" class="variable-input" id="indConversionRate" value="25" min="5" max="50" onchange="calculateIndependent()">
-                        </div>
-                        <div class="variable-control">
-                            <label class="variable-label">Avg Premium</label>
-                            <input type="number" class="variable-input" id="indAvgPremium" value="750" min="500" max="1500" onchange="calculateIndependent()">
-                        </div>
-                        <div class="variable-control">
-                            <label class="variable-label">Placement %</label>
-                            <input type="number" class="variable-input" id="indPlacementRate" value="75" min="50" max="95" onchange="calculateIndependent()">
-                        </div>
+    </div>
+
+    <!-- Independent Modal - Compact Version -->
+    <div id="independentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Go Independent Calculator</h2>
+                <span class="close-btn" onclick="closeIndependentModal()">&times;</span>
+            </div>
+            
+            <div class="independent-info">
+                <p><strong>Ready to take control?</strong> Fund your own leads and get direct carrier contracts with competitive commissions. We provide quality calls at $35 per call (180+ seconds).</p>
+            </div>
+
+            <div class="independent-content">
+                <div class="calc-section">
+                    <h3 class="calc-title">📊 Your Input</h3>
+                    <div class="variable-control">
+                        <label class="variable-label">Hours per Week</label>
+                        <input type="number" class="variable-input" id="indHoursPerWeek" value="40" min="1" max="80" onchange="calculateIndependent()">
                     </div>
-                    
-                    <div class="modal-section">
-                        <h4>💼 Fixed Parameters</h4>
-                        <div class="fixed-params">
-                            <p><strong>Commission Rates:</strong></p>
-                            <p style="margin-left: 10px;">• Level: 105%</p>
-                            <p style="margin-left: 10px;">• Graded: 55%</p>
-                            <p style="margin-top: 8px;"><strong>Fixed Costs:</strong></p>
-                            <p style="margin-left: 10px;">• Call cost: $35 per call</p>
-                            <p style="margin-left: 10px;">• Lapse rate: 30%</p>
-                            <p style="margin-left: 10px;">• Level policies: 75%</p>
-                            <p style="margin-left: 10px;">• Graded policies: 25%</p>
-                        </div>
+                    <div class="variable-control">
+                        <label class="variable-label">Conversion Rate (%)</label>
+                        <input type="number" class="variable-input" id="indConversionRate" value="20" min="5" max="50" onchange="calculateIndependent()">
+                    </div>
+                    <div class="variable-control">
+                        <label class="variable-label">Average Premium ($)</label>
+                        <input type="number" class="variable-input" id="indAvgPremium" value="750" min="500" max="1500" onchange="calculateIndependent()">
+                    </div>
+                    <div class="variable-control">
+                        <label class="variable-label">Placement Rate (%)</label>
+                        <input type="number" class="variable-input" id="indPlacementRate" value="75" min="50" max="90" onchange="calculateIndependent()">
                     </div>
                 </div>
-                
-                <div class="modal-results">
-                    <h4>📈 Projected Earnings</h4>
-                    <div class="result-row">
-                        <span>Monthly Applications:</span>
-                        <span id="indMonthlyApps">0</span>
+
+                <div class="calc-section">
+                    <h3 class="calc-title">📋 Fixed Parameters</h3>
+                    <div class="fixed-params">
+                        <p><strong>Commission Rates:</strong></p>
+                                        <p style="margin-left: 10px;">• Level: 10-30% (based on conversion)</p>
+                                        <p style="margin-left: 10px;">• Graded: 10-20% (based on conversion)</p>
+                        <p style="margin-top: 8px;"><strong>Fixed Costs:</strong></p>
+                        <p style="margin-left: 10px;">• Calls: $35/call</p>
+                        <p style="margin-left: 10px;">• Lapse: 35%</p>
+                        <p class="lapse-note">*Higher lapse vs our 25% - solo agents lack dedicated retention team support</p>
+                        <p style="margin-left: 10px;">• No Base Pay</p>
                     </div>
-                    <div class="result-row">
-                        <span>Monthly Level Policies:</span>
-                        <span id="indLevelPolicies">0</span>
+                </div>
+
+                <div class="calc-section">
+                    <h3 class="calc-title">💰 Financial Results</h3>
+                    <div class="independent-results">
+                        <div class="independent-result-card">
+                            <div class="independent-result-label">Monthly Revenue</div>
+                            <div class="independent-result-value" id="indMonthlyRevenue">$0</div>
+                        </div>
+                        <div class="independent-result-card" style="background: linear-gradient(135deg, #ee0979, #ff6a00);">
+                            <div class="independent-result-label">Monthly Costs</div>
+                            <div class="independent-result-value" id="indMonthlyCosts">$0</div>
+                        </div>
+                        <div class="independent-result-card">
+                            <div class="independent-result-label">Net Monthly</div>
+                            <div class="independent-result-value" id="indMonthlyProfit">$0</div>
+                        </div>
+                        <div class="independent-result-card" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                            <div class="independent-result-label">Annual Projection</div>
+                            <div class="independent-result-value" id="indAnnualProjection">$0</div>
+                        </div>
                     </div>
-                    <div class="result-row">
-                        <span>Monthly Graded Policies:</span>
-                        <span id="indGradedPolicies">0</span>
-                    </div>
-                    <div class="result-row">
-                        <span>Monthly Commission:</span>
-                        <span id="indMonthlyCommission">$0</span>
-                    </div>
-                    <div class="result-row">
-                        <span>Monthly Call Costs:</span>
-                        <span id="indCallCosts">$0</span>
-                    </div>
-                    <div class="result-row">
-                        <span>Net Monthly Income:</span>
-                        <span id="indNetIncome">$0</span>
-                    </div>
-                    <div class="result-row">
-                        <span>Annual Projection:</span>
-                        <span id="indAnnualProjection">$0</span>
+                    <div class="comparison-box">
+                        <strong>Comparison:</strong>
+                        <span id="comparisonText"></span>
                     </div>
                 </div>
             </div>
@@ -890,192 +1017,238 @@
     </div>
 
     <script>
-        // Global variables
-        let advancedExpanded = false;
-        let commissionExpanded = false;
 
-        // Commission rate function based on conversion percentage
-        function getCommissionRate(conversion) {
-            if (conversion < 10) return { level: 10, graded: 10 };
-            if (conversion < 15) return { level: 15, graded: 10 };
-            if (conversion < 20) return { level: 20, graded: 15 };
-            if (conversion < 25) return { level: 22, graded: 18 };
-            if (conversion < 30) return { level: 25, graded: 19 };
-            if (conversion < 35) return { level: 26, graded: 20 };
-            if (conversion < 40) return { level: 28, graded: 20 };
-            return { level: 30, graded: 20 };
+        // Commission rate table
+        const commissionRates = {
+            10: { day1: 15, graded: 10 },
+            15: { day1: 20, graded: 15 },
+            20: { day1: 22, graded: 18 },
+            25: { day1: 25, graded: 19 },
+            30: { day1: 26, graded: 20 },
+            35: { day1: 28, graded: 20 },
+            40: { day1: 30, graded: 20 }
+        };
+
+        // Get commission rate based on conversion percentage
+        function getCommissionRate(conversionPct) {
+            if (conversionPct < 10) return { day1: 10, graded: 10 };
+            
+            let rates = { day1: 0, graded: 0 };
+            let keys = Object.keys(commissionRates).map(Number).sort((a, b) => a - b);
+            
+            for (let key of keys) {
+                if (conversionPct >= key) {
+                    rates = commissionRates[key];
+                }
+            }
+            
+            return rates;
         }
 
-        // Update commission highlight
-        function updateCommissionHighlight(conversion) {
-            const rows = document.querySelectorAll('.commission-row');
-            rows.forEach(row => row.classList.remove('current'));
+        // Toggle commission schedule visibility
+        function toggleCommissionSchedule() {
+            const content = document.getElementById('commissionContent');
+            const toggle = document.getElementById('commissionToggle');
             
-            // Find the row that matches the current conversion level
-            rows.forEach(row => {
-                const cells = row.querySelectorAll('.commission-cell');
-                if (cells.length >= 3) {
-                    const conversionCell = cells[0];
-                    const conversionText = conversionCell.textContent.trim();
-                    
-                    // Check if this row matches the current conversion
-                    let matches = false;
-                    if (conversion < 10 && conversionText === '<10%') {
-                        matches = true;
-                    } else if (conversion >= 40 && conversionText === '40%+') {
-                        matches = true;
-                    } else if (conversionText === conversion + '%') {
-                        matches = true;
-                    }
-                    
-                    if (matches) {
-                        row.classList.add('current');
+            content.classList.toggle('expanded');
+            toggle.textContent = content.classList.contains('expanded') ? '▲ Hide' : '▼ View';
+        }
+
+        // Update commission table highlighting
+        function updateCommissionHighlight(conversionPct) {
+            // Clear all highlights
+            document.querySelectorAll('.commission-row').forEach(row => {
+                row.classList.remove('current');
+                // Remove any badges
+                const badge = row.querySelector('.current-rate-badge');
+                if (badge) badge.remove();
+            });
+            
+            // Highlight current rate
+            let rowId = '';
+            if (conversionPct < 10) rowId = 'rate-below10';
+            else if (conversionPct >= 40) rowId = 'rate-40';
+            else {
+                const keys = [10, 15, 20, 25, 30, 35];
+                for (let i = keys.length - 1; i >= 0; i--) {
+                    if (conversionPct >= keys[i]) {
+                        rowId = `rate-${keys[i]}`;
+                        break;
                     }
                 }
-            });
+            }
+            
+            if (rowId) {
+                const row = document.getElementById(rowId);
+                if (row) {
+                    row.classList.add('current');
+                    const firstCell = row.querySelector('.commission-cell:first-child');
+                    const badge = document.createElement('span');
+                    badge.className = 'current-rate-badge';
+                    badge.textContent = 'CURRENT';
+                    firstCell.appendChild(badge);
+                }
+            }
         }
+
 
         // Toggle advanced variables
         function toggleAdvanced() {
-            const content = document.getElementById('advancedContent');
-            const definitions = document.querySelector('.definitions-panel');
+            const advSection = document.getElementById('advancedVariables');
+            const definitionsPanel = document.getElementById('advancedDefinitions');
+            const sectionTitle = document.querySelector('h3[onclick="toggleAdvanced()"]');
             
-            advancedExpanded = !advancedExpanded;
+            // Toggle the expanded state
+            advSection.classList.toggle('expanded');
             
-            if (advancedExpanded) {
-                content.classList.add('expanded');
-                definitions.style.display = 'none';
+            // Hide definitions panel when expanded, show when collapsed
+            if (advSection.classList.contains('expanded')) {
+                definitionsPanel.classList.add('hidden');
+                sectionTitle.innerHTML = '🔧 Advanced Variables ▲ <span style="font-size: 0.7em; color: #7f8c8d; font-weight: normal;">(Click to hide & return to definitions)</span>';
             } else {
-                content.classList.remove('expanded');
-                definitions.style.display = 'block';
+                definitionsPanel.classList.remove('hidden');
+                sectionTitle.innerHTML = '🔧 Advanced Variables ▼ <span style="font-size: 0.7em; color: #7f8c8d; font-weight: normal;">(Click to view & edit)</span>';
             }
         }
 
-        // Toggle commission schedule
-        function toggleCommissionSchedule() {
-            const content = document.getElementById('commissionContent');
-            const toggleText = document.getElementById('commissionToggleText');
-            
-            commissionExpanded = !commissionExpanded;
-            
-            if (commissionExpanded) {
-                content.classList.add('expanded');
-                toggleText.textContent = 'Hide';
-            } else {
-                content.classList.remove('expanded');
-                toggleText.textContent = 'Show';
-            }
-        }
 
-        // Calculate all values
-        function calculateAll() {
-            // Get input values
-            const hoursPerWeek = parseFloat(document.getElementById('hoursPerWeek').value);
-            const conversionPct = parseFloat(document.getElementById('conversionPercentage').value);
-            const avgPremium = parseFloat(document.getElementById('avgPremium').value);
-            const levelPct = parseFloat(document.getElementById('levelCoverage').value);
-            const gradedPct = parseFloat(document.getElementById('gradedPercentage').value);
-            const placementPct = parseFloat(document.getElementById('placementPercentage').value);
-            const lapsePct = parseFloat(document.getElementById('lapsedPercentage').value);
-
-            // Calculate daily values
-            const hoursPerDay = hoursPerWeek / 5;
-            const billableCallsPerDay = hoursPerDay * 2;
-            
-            // Update calls info
-            document.getElementById('callsInfo').textContent = Math.round(billableCallsPerDay);
-            updateCommissionHighlight(conversionPct);
-            
-            // Constants
-            const workingDaysPerMonth = 22;
-            
-            // Calculate for single agent
-            const totalCallsPerMonth = billableCallsPerDay * workingDaysPerMonth;
-            const applicationsSubmitted = totalCallsPerMonth * (conversionPct / 100);
-            const issuedPolicies = applicationsSubmitted * (placementPct / 100);
-            
-            const levelPolicies = issuedPolicies * (levelPct / 100);
-            const gradedPolicies = issuedPolicies * (gradedPct / 100);
-            
-            const rates = getCommissionRate(conversionPct);
-            const levelCommission = (rates.level / 100) * avgPremium * 0.75 * levelPolicies;
-            const gradedCommission = (rates.graded / 100) * avgPremium * 0.75 * gradedPolicies;
-            const totalMonthlyCommission = levelCommission + gradedCommission;
-            
-            const totalMonthlyPay = totalMonthlyCommission;
-            const totalAnnualPay = totalMonthlyPay * 12;
-            
-            const remainingLevelPolicies = levelPolicies * (1 - lapsePct / 100);
-            const remainingGradedPolicies = gradedPolicies * (1 - lapsePct / 100);
-            
-            const backendLevelCommission = (rates.level / 100) * avgPremium * 0.25 * remainingLevelPolicies;
-            const backendGradedCommission = (rates.graded / 100) * avgPremium * 0.25 * remainingGradedPolicies;
-            const totalBackendCommission = backendLevelCommission + backendGradedCommission;
-            
-            const totalProjectedEarnings = totalAnnualPay + totalBackendCommission;
-            
-            // Update Agent View
-            document.getElementById('totalCalls').textContent = Math.round(totalCallsPerMonth);
-            document.getElementById('applications').textContent = Math.round(applicationsSubmitted);
-            document.getElementById('issuedPolicies').textContent = Math.round(issuedPolicies);
-            document.getElementById('levelPolicies').textContent = Math.round(levelPolicies);
-            document.getElementById('monthlyCommission').textContent = formatCurrency(totalMonthlyCommission);
-            document.getElementById('totalMonthlyPay').textContent = formatCurrency(totalMonthlyPay);
-            document.getElementById('totalAnnualPay').textContent = formatCurrency(totalAnnualPay);
-            document.getElementById('backendNote').textContent = `+${formatCurrency(totalBackendCommission)} (Mo 10-12)`;
-        }
-
-        // Independent Agent Modal Functions
+        // Open Independent Modal
         function openIndependentModal() {
-            document.getElementById('independentModal').style.display = 'block';
+            document.getElementById('independentModal').classList.add('active');
             calculateIndependent();
         }
 
+        // Close Independent Modal
         function closeIndependentModal() {
-            document.getElementById('independentModal').style.display = 'none';
+            document.getElementById('independentModal').classList.remove('active');
         }
 
+        // Calculate Independent Scenario
         function calculateIndependent() {
-            const callsPerDay = parseFloat(document.getElementById('indCallsPerDay').value) || 20;
-            const conversionRate = parseFloat(document.getElementById('indConversionRate').value) || 25;
+            const hoursPerWeek = parseFloat(document.getElementById('indHoursPerWeek').value) || 40;
+            const conversionRate = parseFloat(document.getElementById('indConversionRate').value) || 20;
             const avgPremium = parseFloat(document.getElementById('indAvgPremium').value) || 750;
             const placementRate = parseFloat(document.getElementById('indPlacementRate').value) || 75;
             
             // Fixed values
             const workingDaysPerMonth = 22;
             const lapseRate = 30;
-            const levelCommissionRate = 105;
+            const day1CommissionRate = 105;
             const gradedCommissionRate = 55;
             const callCost = 35;
-            const levelPercentage = 75;
+            const day1Percentage = 75;
             const gradedPercentage = 25;
             
-            // Calculations
-            const monthlyCalls = callsPerDay * workingDaysPerMonth;
-            const monthlyApplications = monthlyCalls * (conversionRate / 100);
-            const monthlyIssuedPolicies = monthlyApplications * (placementRate / 100);
+            // Calculate calls and policies
+            const hoursPerDay = hoursPerWeek / 5;
+            const billableCallsPerDay = hoursPerDay * 2; // 2 calls per hour
+            const totalCallsPerMonth = billableCallsPerDay * workingDaysPerMonth;
+            const applications = totalCallsPerMonth * (conversionRate / 100);
+            const issuedPolicies = applications * (placementRate / 100);
             
-            const monthlyLevelPolicies = monthlyIssuedPolicies * (levelPercentage / 100);
-            const monthlyGradedPolicies = monthlyIssuedPolicies * (gradedPercentage / 100);
+            // Policy breakdown
+            const day1Policies = issuedPolicies * (day1Percentage / 100);
+            const gradedPolicies = issuedPolicies * (gradedPercentage / 100);
             
-            const monthlyCommission = (levelCommissionRate / 100) * avgPremium * 0.75 * monthlyLevelPolicies + 
-                                    (gradedCommissionRate / 100) * avgPremium * 0.75 * monthlyGradedPolicies;
+            // Revenue calculation
+            const day1Revenue = (day1CommissionRate / 100) * avgPremium * 0.75 * day1Policies;
+            const gradedRevenue = (gradedCommissionRate / 100) * avgPremium * 0.75 * gradedPolicies;
+            const totalRevenue = day1Revenue + gradedRevenue;
             
-            const monthlyCallCosts = monthlyCalls * callCost;
-            const netMonthlyIncome = monthlyCommission - monthlyCallCosts;
-            const annualProjection = netMonthlyIncome * 12;
+            // Cost calculations
+            const callExpenses = callCost * totalCallsPerMonth;
+            const day1Chargebacks = day1Revenue * (lapseRate / 100);
+            const gradedChargebacks = gradedRevenue * (lapseRate / 100);
+            const totalChargebacks = day1Chargebacks + gradedChargebacks;
+            
+            // Total costs and profit
+            const totalCosts = callExpenses + totalChargebacks;
+            const netProfit = totalRevenue - totalCosts;
+            const annualProjection = netProfit * 12;
             
             // Update display
-            document.getElementById('indMonthlyApps').textContent = Math.round(monthlyApplications);
-            document.getElementById('indLevelPolicies').textContent = Math.round(monthlyLevelPolicies);
-            document.getElementById('indGradedPolicies').textContent = Math.round(monthlyGradedPolicies);
-            document.getElementById('indMonthlyCommission').textContent = formatCurrency(monthlyCommission);
-            document.getElementById('indCallCosts').textContent = formatCurrency(monthlyCallCosts);
-            document.getElementById('indNetIncome').textContent = formatCurrency(netMonthlyIncome);
+            document.getElementById('indMonthlyRevenue').textContent = formatCurrency(totalRevenue);
+            document.getElementById('indMonthlyCosts').textContent = formatCurrency(totalCosts);
+            document.getElementById('indMonthlyProfit').textContent = formatCurrency(netProfit);
             document.getElementById('indAnnualProjection').textContent = formatCurrency(annualProjection);
+            
+            // Comparison with current setup
+            const currentMonthlyPay = parseFloat(document.getElementById('totalMonthlyPay').textContent.replace(/[$,]/g, '')) || 0;
+            const difference = netProfit - currentMonthlyPay;
+            
+            let comparisonText = '';
+            if (difference > 0) {
+                comparisonText = `+${formatCurrency(difference)}/month vs current. `;
+            } else {
+                comparisonText = `${formatCurrency(difference)}/month vs current. `;
+            }
+            comparisonText += `No guaranteed income, you fund leads & handle chargebacks.`;
+            
+            document.getElementById('comparisonText').innerHTML = comparisonText;
         }
 
-        // Utility function to format currency
+        // Main calculation function
+        function calculateAll() {
+            // Get input values
+            const hoursPerWeek = parseFloat(document.getElementById('hoursPerWeek').value) || 40;
+            const hoursPerDay = hoursPerWeek / 5;
+            const billableCallsPerDay = hoursPerDay * 2; // Auto-calculate: 2 calls per hour
+            const conversionPct = parseFloat(document.getElementById('conversionPercentage').value) || 20;
+            const avgPremium = parseFloat(document.getElementById('averagePremium').value) || 750;
+            const day1Pct = parseFloat(document.getElementById('day1CoveragePercentage').value) || 75;
+            const gradedPct = parseFloat(document.getElementById('gradedPercentage').value) || 25;
+            const placementPct = parseFloat(document.getElementById('placementPercentage').value) || 75;
+            const lapsePct = parseFloat(document.getElementById('lapsedPercentage').value) || 25;
+            
+            // Update calls display and commission highlight
+            document.getElementById('callsInfo').textContent = Math.round(billableCallsPerDay);
+            updateCommissionHighlight(conversionPct);
+            
+            // Constants
+            const workingDaysPerMonth = 22;
+            // Calculate for single agent (commission only)
+            const monthlyBasePay = 0;
+            
+            const totalCallsPerMonth = billableCallsPerDay * workingDaysPerMonth;
+            const applicationsSubmitted = totalCallsPerMonth * (conversionPct / 100);
+            const issuedPolicies = applicationsSubmitted * (placementPct / 100);
+            
+            const day1Policies = issuedPolicies * (day1Pct / 100);
+            const gradedPolicies = issuedPolicies * (gradedPct / 100);
+            
+            const rates = getCommissionRate(conversionPct);
+            
+            const day1Commission = (rates.day1 / 100) * avgPremium * 0.75 * day1Policies;
+            const gradedCommission = (rates.graded / 100) * avgPremium * 0.75 * gradedPolicies;
+            const totalMonthlyCommission = day1Commission + gradedCommission;
+            
+            const totalMonthlyPay = monthlyBasePay + totalMonthlyCommission;
+            const totalAnnualPay = totalMonthlyPay * 12;
+            
+            const remainingLevelPolicies = day1Policies * (1 - lapsePct / 100);
+            const remainingGradedPolicies = gradedPolicies * (1 - lapsePct / 100);
+            
+            const backendLevelCommission = (rates.day1 / 100) * avgPremium * 0.25 * remainingLevelPolicies;
+            const backendGradedCommission = (rates.graded / 100) * avgPremium * 0.25 * remainingGradedPolicies;
+            const totalBackendCommission = backendLevelCommission + backendGradedCommission;
+            
+            const totalProjectedEarnings = totalAnnualPay + totalBackendCommission;
+            
+            // Update Agent View
+            document.getElementById('monthlyBasePay').textContent = formatCurrency(monthlyBasePay);
+            document.getElementById('monthlyCommission').textContent = formatCurrency(totalMonthlyCommission);
+            document.getElementById('totalMonthlyPay').textContent = formatCurrency(totalMonthlyPay);
+            document.getElementById('totalAnnualPay').textContent = formatCurrency(totalAnnualPay);
+            document.getElementById('backendNote').textContent = `+${formatCurrency(totalBackendCommission)} (Mo 10-12)`;
+            
+            document.getElementById('policiesPerMonth').textContent = Math.round(issuedPolicies);
+            document.getElementById('day1Policies').textContent = Math.round(day1Policies);
+            document.getElementById('gradedPolicies').textContent = Math.round(gradedPolicies);
+            document.getElementById('backendCommissions').textContent = formatCurrency(totalBackendCommission);
+            document.getElementById('totalProjected').textContent = formatCurrency(totalProjectedEarnings);
+        }
+
+        // Format currency
         function formatCurrency(amount) {
             return new Intl.NumberFormat('en-US', {
                 style: 'currency',
@@ -1085,17 +1258,17 @@
             }).format(amount);
         }
 
-        // Initialize on page load
-        window.onload = function() {
-            calculateAll();
-        };
-
         // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById('independentModal');
-            if (event.target === modal) {
+            if (event.target == modal) {
                 closeIndependentModal();
             }
+        }
+
+        // Initialize
+        window.onload = function() {
+            calculateAll();
         };
     </script>
 </body>
