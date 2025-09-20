@@ -4,8 +4,8 @@
   "description": "Final Expense Agent Compensation Calculator and Portal",
   "main": "final.html",
   "scripts": {
-    "start": "npx http-server . -p 8080 -c-1",
-    "dev": "npx http-server . -p 8080 -c-1 --cors",
+    "start": "npx http-server . -p 8080 -c-1 -o final.html",
+    "dev": "npx http-server . -p 8080 -c-1 --cors -o final.html",
     "build": "echo 'Static HTML build - no build step required'",
     "test": "echo 'No tests specified'"
   },
