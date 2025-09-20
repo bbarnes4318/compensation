@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Compensation Portal - Version Selector</title>
+    <style>
+        :root {
+            --primary-color: #1E3A8A;
+            --secondary-color: #DC2626;
+            --success-color: #059669;
+            --dark: #1F2937;
+            --light: #F8FAFC;
+            --border-color: #E5E7EB;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1E3A8A 0%, #1F2937 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-image {
+            height: 80px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            color: var(--primary-color);
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        .header-subtitle {
+            color: var(--dark);
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        .version-selector {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .selector-title {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .version-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .version-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .version-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .version-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .version-title {
+            color: var(--primary-color);
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .version-description {
+            color: var(--dark);
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .version-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .version-features li {
+            color: var(--dark);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .version-features li:before {
+            content: "✓";
+            color: var(--success-color);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .version-button {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .version-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .back-link a:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .version-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-logo {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .logo-text {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-logo">
+                <img src="../public/amben.png" alt="Amben Logo" class="logo-image">
+                <span class="logo-text">Agent Compensation</span>
+            </div>
+            <p class="header-subtitle">Choose your compensation calculator version</p>
+        </div>
+
+        <div class="version-selector">
+            <h2 class="selector-title">Select Calculator Version</h2>
+            
+            <div class="version-grid">
+                <div class="version-card" onclick="window.location.href='agent-only.html'">
+                    <div class="version-icon">👤</div>
+                    <h3 class="version-title">Agent Only</h3>
+                    <p class="version-description">Standard agent calculator with hourly pay and commission structure.</p>
+                    <ul class="version-features">
+                        <li>Hourly base pay + commission</li>
+                        <li>Standard commission rates</li>
+                        <li>Agent-focused interface</li>
+                        <li>Independent calculator</li>
+                    </ul>
+                    <a href="agent-only.html" class="version-button">Use Agent Only</a>
+                </div>
+
+                <div class="version-card" onclick="window.location.href='commission-based.html'">
+                    <div class="version-icon">💰</div>
+                    <h3 class="version-title">Commission Based</h3>
+                    <p class="version-description">Pure commission model with performance-based rates.</p>
+                    <ul class="version-features">
+                        <li>No hourly pay - commission only</li>
+                        <li>Performance-based commission rates</li>
+                        <li>Higher conversion = higher rates</li>
+                        <li>Independent calculator</li>
+                    </ul>
+                    <a href="commission-based.html" class="version-button">Use Commission Based</a>
+                </div>
+            </div>
+
+            <div class="back-link">
+                <a href="../final.html">View Full Version (with Company Features)</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
