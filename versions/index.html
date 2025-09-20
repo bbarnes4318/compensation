@@ -247,12 +247,42 @@
                     </ul>
                     <a href="commission-based.html" class="version-button">Use Commission Based</a>
                 </div>
-            </div>
 
-            <div class="back-link">
-                <a href="../final.html">View Full Version (with Company Features)</a>
+                <div class="version-card" onclick="promptForCompanyAccess()">
+                    <div class="version-icon">🏢</div>
+                    <h3 class="version-title">Company View</h3>
+                    <p class="version-description">Full company calculator with agent management and profit analysis.</p>
+                    <ul class="version-features">
+                        <li>Agent team management</li>
+                        <li>Company profit analysis</li>
+                        <li>ROI calculations</li>
+                        <li>Revenue & scale metrics</li>
+                        <li><strong>Password Required</strong></li>
+                    </ul>
+                    <button class="version-button" onclick="promptForCompanyAccess()">Access Company View</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function promptForCompanyAccess() {
+            const password = prompt("Enter password to access Company View:");
+            if (password === "3535") {
+                window.location.href = "../final.html";
+            } else if (password !== null) {
+                alert("Incorrect password. Access denied.");
+            }
+        }
+
+        // Prevent the onclick from firing on the card when clicking the button
+        document.querySelectorAll('.version-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') {
+                    e.stopPropagation();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
