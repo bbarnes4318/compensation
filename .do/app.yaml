@@ -1,0 +1,25 @@
+name: agent-compensation-portal
+services:
+- name: web
+  source_dir: /
+  github:
+    repo: bbarnes4318/compensation
+    branch: main
+  run_command: npm start
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  routes:
+  - path: /
+  health_check:
+    http_path: /
+    initial_delay_seconds: 10
+    period_seconds: 10
+    timeout_seconds: 5
+    success_threshold: 1
+    failure_threshold: 3
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: PORT
+    value: "8080"
