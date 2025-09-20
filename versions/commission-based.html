@@ -95,14 +95,14 @@
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            min-height: calc(100vh - 150px);
+            gap: 10px;
+            min-height: calc(100vh - 100px);
         }
 
         .left-panel, .right-panel {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 8px;
+            padding: 8px;
             box-shadow: var(--shadow-lg);
             display: flex;
             flex-direction: column;
@@ -117,40 +117,40 @@
         .section-title {
             background: linear-gradient(135deg, #1E3A8A 0%, #DC2626 100%);
             color: white;
-            padding: 8px 15px;
-            border-radius: 8px;
-            font-size: 1em;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8em;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
             text-align: center;
         }
 
         .results-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 6px;
+            margin-bottom: 8px;
         }
 
         .result-card {
             background: linear-gradient(135deg, #1E3A8A 0%, #1F2937 100%);
             color: white;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 6px;
+            border-radius: 6px;
             text-align: center;
             box-shadow: var(--shadow);
         }
 
         .result-label {
             display: block;
-            font-size: 0.8em;
+            font-size: 0.7em;
             opacity: 0.9;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
 
         .result-value {
             display: block;
-            font-size: 1.2em;
+            font-size: 1em;
             font-weight: 700;
         }
 
@@ -160,19 +160,19 @@
             align-items: center;
             background: linear-gradient(135deg, #1E3A8A 0%, #1F2937 100%);
             color: white;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 6px;
+            border-radius: 6px;
             box-shadow: var(--shadow);
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
 
         .metric-value {
-            font-size: 1.3em;
+            font-size: 1.1em;
             font-weight: 700;
         }
 
         .backend-income {
-            font-size: 0.8em;
+            font-size: 0.7em;
             opacity: 0.8;
         }
 
@@ -187,32 +187,32 @@
         }
 
         .variables-section {
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
 
         .variable-control {
-            margin-bottom: 12px;
-            padding: 10px;
+            margin-bottom: 6px;
+            padding: 6px;
             background: #F8FAFC;
-            border-radius: 8px;
+            border-radius: 6px;
             border: 1px solid var(--border-color);
         }
 
         .variable-label {
             display: block;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             color: var(--dark);
-            font-size: 0.9em;
+            font-size: 0.8em;
         }
 
         .variable-input {
             width: 100%;
-            padding: 8px;
-            border: 2px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 0.9em;
-            margin-bottom: 6px;
+            padding: 4px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-bottom: 3px;
             transition: border-color 0.3s ease;
         }
 
@@ -227,15 +227,15 @@
         }
 
         .info-text {
-            font-size: 0.75em;
+            font-size: 0.7em;
             color: var(--text-light);
             font-style: italic;
         }
 
         .advanced-section {
-            margin-top: 15px;
+            margin-top: 8px;
             border-top: 2px solid var(--border-color);
-            padding-top: 15px;
+            padding-top: 8px;
         }
 
         .advanced-toggle {
@@ -243,13 +243,13 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            padding: 10px 12px;
+            padding: 6px 8px;
             background: linear-gradient(135deg, #1E3A8A 0%, #DC2626 100%);
             color: white;
-            border-radius: 8px;
-            margin-bottom: 12px;
+            border-radius: 6px;
+            margin-bottom: 6px;
             transition: all 0.3s ease;
-            font-size: 0.9em;
+            font-size: 0.8em;
         }
 
         .advanced-toggle:hover {
@@ -264,17 +264,17 @@
         }
 
         .advanced-content.expanded {
-            max-height: 250px;
+            max-height: 180px;
         }
 
         .advanced-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 6px;
         }
 
         .commission-section {
-            margin-top: 15px;
+            margin-top: 8px;
         }
 
         .commission-toggle {
@@ -298,15 +298,15 @@
         }
 
         .commission-content.expanded {
-            max-height: 140px;
+            max-height: 100px;
         }
 
         .commission-panel {
             background: #F8FAFC;
-            padding: 6px;
-            border-radius: 8px;
+            padding: 4px;
+            border-radius: 6px;
             border: 1px solid var(--border-color);
-            margin-top: 8px;
+            margin-top: 4px;
         }
 
         .commission-header {
@@ -318,13 +318,13 @@
         }
 
         .commission-title {
-            font-size: 0.8em;
+            font-size: 0.7em;
             font-weight: 600;
             color: var(--dark);
         }
 
         .commission-table {
-            font-size: 0.55em;
+            font-size: 0.5em;
             width: 100%;
             border-collapse: collapse;
         }
@@ -343,7 +343,7 @@
         }
 
         .commission-cell {
-            padding: 1px 2px;
+            padding: 1px;
             text-align: center;
             border-right: 1px solid #E5E7EB;
         }
@@ -756,9 +756,9 @@
                                     <table class="commission-table">
                                         <tbody>
                                             <tr class="commission-row">
-                                                <td class="commission-cell">Conversion %</td>
-                                                <td class="commission-cell">Level Comm</td>
-                                                <td class="commission-cell">Graded Comm</td>
+                                                <td class="commission-cell">Conversion</td>
+                                                <td class="commission-cell">Level</td>
+                                                <td class="commission-cell">Graded</td>
                                             </tr>
                                             <tr class="commission-row">
                                                 <td class="commission-cell">&lt;10%</td>
